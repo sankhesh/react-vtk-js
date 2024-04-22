@@ -163,6 +163,8 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
       const y2 = Math.ceil(yp + tolerance);
 
       const selector = getSelector();
+      if (selector.isDeleted()) return [];
+
       const openGLRenderWindow = openGLRenderWindowAPI.get();
       const renderer = rendererAPI.get();
 
@@ -231,6 +233,8 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
       if (!isMounted.current) return [];
 
       const selector = getSelector();
+      if (selector.isDeleted()) return [];
+
       const openGLRenderWindow = openGLRenderWindowAPI.get();
       const renderer = rendererAPI.get();
 
@@ -297,6 +301,8 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
       if (!isMounted.current) return null;
 
       const selector = getSelector();
+      if (selector.isDeleted()) return null;
+
       const openGLRenderWindow = openGLRenderWindowAPI.get();
       const renderer = rendererAPI.get();
 
