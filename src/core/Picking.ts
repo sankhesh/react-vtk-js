@@ -13,6 +13,7 @@ import {
 import deletionRegistry from '../utils/DeletionRegistry';
 import useDebounce from '../utils/useDebounce';
 import useGetterRef from '../utils/useGetterRef';
+import { useIsMounted } from '../utils/useIsMounted';
 import useMount from '../utils/useMount';
 import useUnmount from '../utils/useUnmount';
 import {
@@ -136,6 +137,8 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
     };
   });
 
+  const isMounted = useIsMounted();
+
   // --- Props --- //
 
   const {
@@ -152,12 +155,16 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
 
   const pickClosest = useCallback(
     (xp: number, yp: number, tolerance: number): PickResult[] => {
+      if (!isMounted.current) return [];
+
       const x1 = Math.floor(xp - tolerance);
       const y1 = Math.floor(yp - tolerance);
       const x2 = Math.ceil(xp + tolerance);
       const y2 = Math.ceil(yp + tolerance);
 
       const selector = getSelector();
+      if (selector.isDeleted()) return [];
+
       const openGLRenderWindow = openGLRenderWindowAPI.get();
       const renderer = rendererAPI.get();
 
@@ -218,12 +225,16 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
         },
       ] as PickResult[];
     },
-    [rendererAPI, openGLRenderWindowAPI, getSelector]
+    [rendererAPI, openGLRenderWindowAPI, isMounted, getSelector]
   );
 
   const pick = useCallback(
     (x1: number, y1: number, x2: number, y2: number): PickResult[] => {
+      if (!isMounted.current) return [];
+
       const selector = getSelector();
+      if (selector.isDeleted()) return [];
+
       const openGLRenderWindow = openGLRenderWindowAPI.get();
       const renderer = rendererAPI.get();
 
@@ -277,7 +288,7 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
         })
         .filter(Boolean) as PickResult[];
     },
-    [rendererAPI, openGLRenderWindowAPI, getSelector]
+    [rendererAPI, openGLRenderWindowAPI, isMounted, getSelector]
   );
 
   const pickWithFrustum = useCallback(
@@ -287,7 +298,11 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
       x2: number,
       y2: number
     ): FrustumPickResult | null => {
+      if (!isMounted.current) return null;
+
       const selector = getSelector();
+      if (selector.isDeleted()) return null;
+
       const openGLRenderWindow = openGLRenderWindowAPI.get();
       const renderer = rendererAPI.get();
 
@@ -324,7 +339,7 @@ export default forwardRef(function ViewPicking(props: PickingProps, fwdRef) {
       });
       return { frustum, representationIds };
     },
-    [rendererAPI, openGLRenderWindowAPI, getSelector]
+    [rendererAPI, openGLRenderWindowAPI, isMounted, getSelector]
   );
 
   const api = useMemo(
