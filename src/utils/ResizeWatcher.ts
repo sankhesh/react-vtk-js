@@ -41,11 +41,14 @@ export class ResizeWatcher implements IResizeWatcher {
   }
 
   unwatch(element: Element, callback: ResizeWatcherCallback) {
-    this.resizeObserver.unobserve(element);
     const cbs = this.callbacks.get(element) ?? [];
     const idx = cbs.indexOf(callback);
     if (idx > -1) {
       cbs.splice(idx, 1);
+    }
+    if (cbs.length === 0) {
+      this.callbacks.delete(element);
+      this.resizeObserver.unobserve(element);
     }
   }
 
