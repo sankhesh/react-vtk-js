@@ -48,3 +48,9 @@ export type { ViewProps } from './core/View';
 export { default as VolumeController } from './core/VolumeController';
 export { default as VolumeRepresentation } from './core/VolumeRepresentation';
 export * from './suspense';
+export { ResizeWatcherContext } from './utils/ResizeWatcher';
+export type {
+  IResizeWatcher,
+  ResizeWatcherCallback,
+  ResizeWatcherStop,
+} from './utils/ResizeWatcher';

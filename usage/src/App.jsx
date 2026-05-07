@@ -42,7 +42,10 @@ const demos = new Map([
   ],
   ['Tests/RemoveImageData', lazy(() => import('./Tests/RemoveImageData'))],
   [
-    'Tests/ChangeInteractorStyle',
+    'Tests/ResizeWatcherLeakTest',
+    lazy(() => import('./Tests/ResizeWatcherLeakTest')),
+  ],
+  ['Tests/ChangeInteractorStyle',
     lazy(() => import('./Tests/ChangeInteractorStyle')),
   ],
   ['MultiView', lazy(() => import('./MultiView'))],

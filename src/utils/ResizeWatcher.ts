@@ -48,4 +48,9 @@ export class ResizeWatcher implements IResizeWatcher {
       cbs.splice(idx, 1);
     }
   }
+
+  /** Returns the number of elements currently tracked. Useful for leak detection. */
+  getTrackedElementCount(): number {
+    return this.callbacks.size;
+  }
 }
