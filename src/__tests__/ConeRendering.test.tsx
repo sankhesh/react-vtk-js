@@ -67,6 +67,8 @@ const { mockOGLRWNewInstance, mockRWINewInstance } = vi.hoisted(() => {
     delete: vi.fn(),
     // vtk.js internal: may be queried by vtkRenderWindow.addView().
     getVtkClassName: vi.fn(() => 'vtkOpenGLRenderWindow'),
+    // Called by vtkRenderWindow.addView() to back-link the view to the window.
+    setRenderable: vi.fn(),
   };
 
   /**
