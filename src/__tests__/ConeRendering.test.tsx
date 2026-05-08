@@ -30,8 +30,8 @@
  *   latter proves the former already happened.
  */
 
-import { createRef } from 'react';
 import { cleanup, render } from '@testing-library/react';
+import { createRef } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ---------------------------------------------------------------------------
@@ -119,8 +119,8 @@ import vtkConeSource from '@kitware/vtk.js/Filters/Sources/ConeSource';
 import Algorithm from '../core/Algorithm';
 import GeometryRepresentation from '../core/GeometryRepresentation';
 import View from '../core/View';
-import deletionRegistry from '../utils/DeletionRegistry';
 import { IRepresentation, IView } from '../types';
+import deletionRegistry from '../utils/DeletionRegistry';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -186,7 +186,10 @@ describe('Cone rendering pipeline', () => {
     const { repRef } = renderConeScene();
 
     const mapper = repRef.current?.getMapper();
-    expect(mapper, 'GeometryRepresentation should expose a mapper').toBeTruthy();
+    expect(
+      mapper,
+      'GeometryRepresentation should expose a mapper'
+    ).toBeTruthy();
 
     const polyData = mapper!.getInputData();
     expect(
