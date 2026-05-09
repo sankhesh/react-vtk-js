@@ -6,6 +6,7 @@ export type ResizeWatcherStop = () => void;
 export interface IResizeWatcher {
   watch(element: Element, callback: ResizeWatcherCallback): void;
   unwatch(element: Element, callback: ResizeWatcherCallback): void;
+  getTrackedElementCount?(): number;
 }
 
 export const ResizeWatcherContext = createContext<IResizeWatcher | null>(null);

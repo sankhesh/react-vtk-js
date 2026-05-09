@@ -20,11 +20,11 @@ function ResizeWatcherStats({ cycleCount }) {
   const [trackedCount, setTrackedCount] = useState(0);
 
   useEffect(() => {
-    // Read count after each render triggered by a cycle.
+    // Re-read the count whenever a cycle completes.
     if (resizeWatcher && typeof resizeWatcher.getTrackedElementCount === 'function') {
       setTrackedCount(resizeWatcher.getTrackedElementCount());
     }
-  });
+  }, [resizeWatcher, cycleCount]);
 
   return (
     <div
@@ -83,11 +83,12 @@ function Example() {
   const [showViews, setShowViews] = useState(true);
   const [cycleCount, setCycleCount] = useState(0);
   const intervalRef = useRef(null);
+  const cycleTimeoutRef = useRef(null);
   const [autoCycle, setAutoCycle] = useState(false);
 
   const cycle = () => {
     setShowViews(false);
-    setTimeout(() => {
+    cycleTimeoutRef.current = setTimeout(() => {
       setShowViews(true);
       setCycleCount((c) => c + 1);
     }, 200);
@@ -101,6 +102,13 @@ function Example() {
     }
     return () => clearInterval(intervalRef.current);
   }, [autoCycle]);
+
+  useEffect(
+    () => () => {
+      if (cycleTimeoutRef.current) clearTimeout(cycleTimeoutRef.current);
+    },
+    []
+  );
 
   return (
     <MultiViewRoot style={{ width: '100%' }}>
