@@ -6,6 +6,7 @@ export type ResizeWatcherStop = () => void;
 export interface IResizeWatcher {
   watch(element: Element, callback: ResizeWatcherCallback): void;
   unwatch(element: Element, callback: ResizeWatcherCallback): void;
+  getTrackedElementCount?(): number;
 }
 
 export const ResizeWatcherContext = createContext<IResizeWatcher | null>(null);
@@ -41,11 +42,19 @@ export class ResizeWatcher implements IResizeWatcher {
   }
 
   unwatch(element: Element, callback: ResizeWatcherCallback) {
-    this.resizeObserver.unobserve(element);
     const cbs = this.callbacks.get(element) ?? [];
     const idx = cbs.indexOf(callback);
     if (idx > -1) {
       cbs.splice(idx, 1);
     }
+    if (cbs.length === 0) {
+      this.callbacks.delete(element);
+      this.resizeObserver.unobserve(element);
+    }
+  }
+
+  /** Returns the number of elements currently tracked. Useful for leak detection. */
+  getTrackedElementCount(): number {
+    return this.callbacks.size;
   }
 }
